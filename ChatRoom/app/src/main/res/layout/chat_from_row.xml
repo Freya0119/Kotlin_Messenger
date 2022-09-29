@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView_from_row"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:text="talk something"
+        app:layout_constraintStart_toEndOf="@+id/image_view_chat_from"
+        tools:layout_editor_absoluteX="66dp"
+        tools:layout_editor_absoluteY="31dp" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image_view_chat_from"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="31dp"
+        tools:srcCompat="@tools:sample/avatars" />
+</androidx.constraintlayout.widget.ConstraintLayout>
