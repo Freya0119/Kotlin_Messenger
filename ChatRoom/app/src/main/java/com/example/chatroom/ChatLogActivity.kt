@@ -46,14 +46,16 @@ class ChatLogActivity : AppCompatActivity() {
 
     //生成對話框
     private fun performSendMessage() {
-        val reference = FirebaseDatabase.getInstance().getReference("/message").push()
-
         val fromID = FirebaseAuth.getInstance().uid.toString()
         //need delete?
         val user = intent.getParcelableExtra<UserA>(NewMessageActivity.USER_KEY)
         val toID = toUser?.uid.toString()
 
         val text = edit_text_chat_log.text.toString()
+        //push message裡面的
+        val reference = FirebaseDatabase.getInstance().getReference("/user-message/$fromID/$toID")
+        val toReference = FirebaseDatabase.getInstance().getReference("/user-message/$toID/$fromID")
+        //chatMessage object
         val chatMessage = ChatMessage(
             reference.key!!,
             text,
@@ -63,13 +65,20 @@ class ChatLogActivity : AppCompatActivity() {
         )
         //set 傳edit內容給firebase
         reference.setValue(chatMessage).addOnSuccessListener {
-            Log.d(TAG, "send success id:${reference.key}")
+            Log.d(TAG, "Saved our chat message: ${reference.key}")
+            //clear edit text的內容
+            edit_text_chat_log.text.clear()
+            //拉到最後一條消息
+            recycle_chat_log.scrollToPosition(adapter.itemCount - 1)
         }
     }
 
     //new接收firebase資料
     private fun listenForMessage() {
-        val ref = FirebaseDatabase.getInstance().getReference("/message")
+        val fromID = FirebaseAuth.getInstance().uid.toString()
+        val toID = toUser?.uid.toString()
+
+        val ref = FirebaseDatabase.getInstance().getReference("/user-message/$fromID/$toID")
         ref.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                 val chatMessage = p0.getValue(ChatMessage::class.java)
@@ -107,7 +116,7 @@ class ChatLogActivity : AppCompatActivity() {
 class ChatFromItem(val text: String, private val user: UserA) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.textView_from_row.text = text
-        
+
         val uri = user.profileImageUrl
         Picasso.get().load(uri).into(viewHolder.itemView.image_view_chat_from)
     }

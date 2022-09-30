@@ -35,7 +35,7 @@ class LatestMessage : AppCompatActivity() {
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val currentUser = p0.getValue(UserA::class.java)
-                Log.d("Lateset Message", "Current user: ${currentUser?.profileImageUrl}")
+                Log.d("Latest Message", "Current user: ${currentUser?.profileImageUrl}")
             }
 
             override fun onCancelled(error: DatabaseError) {
