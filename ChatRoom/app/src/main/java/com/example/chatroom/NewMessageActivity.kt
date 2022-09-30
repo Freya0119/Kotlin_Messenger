@@ -33,7 +33,7 @@ class NewMessageActivity : AppCompatActivity() {
         val USER_KEY = "USER_KEY"
     }
 
-    //抓用戶
+    //抓相關用戶
     private fun fetchUsers() {
         val ref = FirebaseDatabase.getInstance().getReference("/users")
 

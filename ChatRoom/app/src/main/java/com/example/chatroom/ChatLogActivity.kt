@@ -77,7 +77,8 @@ class ChatLogActivity : AppCompatActivity() {
                     Log.d(TAG, chatMessage.text)
                     //判斷id為me or you
                     if (chatMessage.formID == FirebaseAuth.getInstance().uid) {
-                        adapter.add(ChatFromItem(chatMessage.text))
+                        val currentUser = LatestMessage.currentUser
+                        adapter.add(ChatFromItem(chatMessage.text, currentUser!!))
                     } else {
                         adapter.add(ChatToItem(chatMessage.text, toUser!!))
                     }
@@ -103,9 +104,12 @@ class ChatLogActivity : AppCompatActivity() {
     }
 }
 
-class ChatFromItem(val text: String) : Item<GroupieViewHolder>() {
+class ChatFromItem(val text: String, private val user: UserA) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.textView_from_row.text = text
+        
+        val uri = user.profileImageUrl
+        Picasso.get().load(uri).into(viewHolder.itemView.image_view_chat_from)
     }
 
     override fun getLayout(): Int {
