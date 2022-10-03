@@ -6,12 +6,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
+import com.xwray.groupie.Item
+import kotlinx.android.synthetic.main.latest_message_row.view.*
+import kotlinx.android.synthetic.main.select_dialog_item_material.*
+import com.xwray.groupie.GroupieAdapter as XwrayGroupieGroupieAdapter
 
 class LatestMessage : AppCompatActivity() {
 
@@ -23,9 +27,62 @@ class LatestMessage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lateest_message)
 
+        //setupDummyRows()
+        listenLatestMessage()
+
         fetchCurrentUser()
 
         verifyUserIsLoggedIn()
+    }
+
+    //被加載的用戶物件viewHolder
+    class LatestMessageRow(val chatMessage: ChatMessage) : Item<GroupieViewHolder>() {
+        override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+            viewHolder.itemView.textView_latest_message.text = chatMessage.text
+        }
+
+        override fun getLayout(): Int {
+            return R.layout.latest_message_row
+        }
+
+    }
+
+    private val adapter = GroupAdapter<GroupieViewHolder>()
+
+    //加載user和最後消息
+    private fun setupDummyRows() {
+//        adapter.add(LatestMessageRow())
+//
+//        recycle_latest_messages.adapter = adapter
+    }
+
+    //監聽latest message
+    private fun listenLatestMessage() {
+        val fromID = FirebaseAuth.getInstance().uid
+        val latestMessageRef = FirebaseDatabase.getInstance().getReference("latest-message/$fromID")
+        latestMessageRef.addChildEventListener(object : ChildEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildAdded(p0: DataSnapshot, previousChildName: String?) {
+                val chatMessage = p0.getValue(ChatMessage::class.java) ?: return
+                adapter.add(LatestMessageRow(chatMessage))
+            }
+
+            override fun onChildChanged(p0: DataSnapshot, previousChildName: String?) {
+                val chatMessage = p0.getValue(ChatMessage::class.java) ?: return
+                adapter.add(LatestMessageRow(chatMessage))
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     //fetch user

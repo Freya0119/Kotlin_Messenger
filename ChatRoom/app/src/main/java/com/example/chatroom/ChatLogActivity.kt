@@ -55,7 +55,7 @@ class ChatLogActivity : AppCompatActivity() {
         //push message裡面的
         val reference = FirebaseDatabase.getInstance().getReference("/user-message/$fromID/$toID")
         val toReference = FirebaseDatabase.getInstance().getReference("/user-message/$toID/$fromID")
-        //chatMessage object
+        //chatMessage object 包括fromID toID UserA text 時間
         val chatMessage = ChatMessage(
             reference.key!!,
             text,
@@ -71,6 +71,14 @@ class ChatLogActivity : AppCompatActivity() {
             //拉到最後一條消息
             recycle_chat_log.scrollToPosition(adapter.itemCount - 1)
         }
+        toReference.setValue(chatMessage)
+        //latest message perform
+        val latestMessageRef =
+            FirebaseDatabase.getInstance().getReference("latest-messages/$fromID/$toID")
+        latestMessageRef.setValue(chatMessage)
+        val toLatestMessageRef =
+            FirebaseDatabase.getInstance().getReference("latest-messages/$toID/$fromID")
+        toLatestMessageRef.setValue(chatMessage)
     }
 
     //new接收firebase資料
