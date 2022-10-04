@@ -14,7 +14,7 @@
         android:theme="@style/Theme.ChatRoom"
         tools:targetApi="31">
         <activity
-            android:name=".LatestMessage"
+            android:name=".LatestMessageActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,14 +32,14 @@
             android:exported="false">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LatestMessage" />
+                android:value=".LatestMessageActivity" />
         </activity>
         <activity
             android:name=".ChatLogActivity"
             android:exported="false">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LatestMessage" />
+                android:value=".LatestMessageActivity" />
         </activity>
     </application>
 

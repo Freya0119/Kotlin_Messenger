@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.latest_message_row.view.*
 import kotlinx.android.synthetic.main.select_dialog_item_material.*
 import com.xwray.groupie.GroupieAdapter as XwrayGroupieGroupieAdapter
 
-class LatestMessage : AppCompatActivity() {
+class LatestMessageActivity : AppCompatActivity() {
 
     companion object {
         var currentUser: UserA? = null

@@ -8,7 +8,7 @@
     tools:context=".RegisterActivity">
 
     <EditText
-        android:id="@+id/et_username"
+        android:id="@+id/edit_text_username"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
@@ -20,10 +20,10 @@
         android:paddingLeft="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/selected_photo_button" />
+        app:layout_constraintTop_toBottomOf="@id/bt_selected_photo" />
 
     <EditText
-        android:id="@+id/et_password"
+        android:id="@+id/edit_text_password"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
@@ -31,9 +31,9 @@
         android:hint="password"
         android:inputType="textPassword"
         android:paddingLeft="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/et_username"
-        app:layout_constraintStart_toStartOf="@+id/et_username"
-        app:layout_constraintTop_toBottomOf="@+id/et_username" />
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_username"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_username"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_username" />
 
     <Button
         android:id="@+id/bt_register"
@@ -42,9 +42,9 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_button"
         android:text="click register"
-        app:layout_constraintEnd_toEndOf="@+id/et_password"
-        app:layout_constraintStart_toStartOf="@+id/et_password"
-        app:layout_constraintTop_toBottomOf="@+id/et_password" />
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_password"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_password"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_password" />
 
     <Button
         android:id="@+id/bt_login"
@@ -53,12 +53,12 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_button"
         android:text="click login"
-        app:layout_constraintEnd_toEndOf="@+id/et_password"
-        app:layout_constraintStart_toStartOf="@+id/et_password"
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_password"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_password"
         app:layout_constraintTop_toBottomOf="@+id/bt_register" />
 
     <Button
-        android:id="@+id/selected_photo_button"
+        android:id="@+id/bt_selected_photo"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/rounded_selected_photo_button"
@@ -73,9 +73,9 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         app:civ_border_width="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/selected_photo_button"
-        app:layout_constraintEnd_toEndOf="@+id/selected_photo_button"
-        app:layout_constraintStart_toStartOf="@+id/selected_photo_button"
-        app:layout_constraintTop_toTopOf="@+id/selected_photo_button" />
+        app:layout_constraintBottom_toBottomOf="@+id/bt_selected_photo"
+        app:layout_constraintEnd_toEndOf="@+id/bt_selected_photo"
+        app:layout_constraintStart_toStartOf="@+id/bt_selected_photo"
+        app:layout_constraintTop_toTopOf="@+id/bt_selected_photo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

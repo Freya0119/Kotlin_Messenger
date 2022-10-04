@@ -8,14 +8,11 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_chat_log.*
-import kotlinx.android.synthetic.main.chat_from_row.*
 import kotlinx.android.synthetic.main.chat_from_row.view.*
 import kotlinx.android.synthetic.main.chat_to_row.view.*
 
@@ -94,7 +91,7 @@ class ChatLogActivity : AppCompatActivity() {
                     Log.d(TAG, chatMessage.text)
                     //判斷id為me or you
                     if (chatMessage.formID == FirebaseAuth.getInstance().uid) {
-                        val currentUser = LatestMessage.currentUser
+                        val currentUser = LatestMessageActivity.currentUser
                         adapter.add(ChatFromItem(chatMessage.text, currentUser!!))
                     } else {
                         adapter.add(ChatToItem(chatMessage.text, toUser!!))
