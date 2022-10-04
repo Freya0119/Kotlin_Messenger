@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.content.ContextCompat.startActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -21,12 +24,34 @@ class LatestMessage : AppCompatActivity() {
 
     companion object {
         var currentUser: UserA? = null
+        val TAG = "LatestMessage"
     }
+
+    private val adapter = GroupAdapter<GroupieViewHolder>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lateest_message)
 
+        recycle_latest_messages.adapter = adapter
+        //添加用戶之間的分隔線
+        recycle_latest_messages.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                DividerItemDecoration.VERTICAL
+            )
+        )
+        //click then open 對話紀錄
+        adapter.setOnItemClickListener { item, view ->
+            Log.d(TAG, "123")
+            val intent = Intent(this, ChatLogActivity::class.java)
+            //被點擊 item 作為 LatestMessageRow 物件
+            val row = item as LatestMessageRow
+            //通過 USER_KEY link row.chatPartnerUser
+            //ChatLogActivity 需要一個user uid?所以通過USER_KEY link?
+            intent.putExtra(NewMessageActivity.USER_KEY, row.chatPartnerUser)
+            startActivity(intent)
+        }
         //setupDummyRows()
         listenLatestMessage()
 
@@ -35,19 +60,16 @@ class LatestMessage : AppCompatActivity() {
         verifyUserIsLoggedIn()
     }
 
-    //被加載的用戶物件viewHolder
-    class LatestMessageRow(val chatMessage: ChatMessage) : Item<GroupieViewHolder>() {
-        override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-            viewHolder.itemView.textView_latest_message.text = chatMessage.text
-        }
+    //hash table
+    val latestMessageMap = HashMap<String, ChatMessage>()
 
-        override fun getLayout(): Int {
-            return R.layout.latest_message_row
+    //refresh message row
+    private fun refreshRecyclerViewMessage() {
+        adapter.clear()
+        latestMessageMap.values.forEach {
+            adapter.add(LatestMessageRow(it))
         }
-
     }
-
-    private val adapter = GroupAdapter<GroupieViewHolder>()
 
     //加載user和最後消息
     private fun setupDummyRows() {
@@ -67,12 +89,14 @@ class LatestMessage : AppCompatActivity() {
 
             override fun onChildAdded(p0: DataSnapshot, previousChildName: String?) {
                 val chatMessage = p0.getValue(ChatMessage::class.java) ?: return
-                adapter.add(LatestMessageRow(chatMessage))
+                latestMessageMap[p0.key!!] = chatMessage
+                refreshRecyclerViewMessage()
             }
 
             override fun onChildChanged(p0: DataSnapshot, previousChildName: String?) {
                 val chatMessage = p0.getValue(ChatMessage::class.java) ?: return
-                adapter.add(LatestMessageRow(chatMessage))
+                latestMessageMap[p0.key!!] = chatMessage
+                refreshRecyclerViewMessage()
             }
 
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
