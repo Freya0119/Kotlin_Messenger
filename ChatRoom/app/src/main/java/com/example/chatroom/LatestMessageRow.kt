@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.latest_message_row.view.*
 
 //被加載的用戶物件viewHolder
 class LatestMessageRow(private val chatMessage: ChatMessage) : Item<GroupieViewHolder>() {
-    var chatPartnerUser: UserA? = null
+    var chatPartnerUser: User? = null
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.textView_latest_message.text = chatMessage.text
@@ -32,7 +32,7 @@ class LatestMessageRow(private val chatMessage: ChatMessage) : Item<GroupieViewH
 
             override fun onDataChange(p0: DataSnapshot) {
                 //set username once
-                val chatPartnerUser = p0.getValue(UserA::class.java)
+                val chatPartnerUser = p0.getValue(User::class.java)
                 viewHolder.itemView.textView_username_latest_message.text =
                     chatPartnerUser?.username
                 //set image once

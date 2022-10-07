@@ -23,7 +23,7 @@ class NewMessageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_new_message)
 
         //通過key取得username
-        val user = intent.getParcelableExtra<UserA>(NewMessageActivity.USER_KEY)
+        val user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
         supportActionBar?.title = user?.uid
         //抓user
         fetchUsers()

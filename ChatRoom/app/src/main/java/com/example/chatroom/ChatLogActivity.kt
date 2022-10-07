@@ -23,13 +23,13 @@ class ChatLogActivity : AppCompatActivity() {
 
     //adapter
     val adapter = GroupAdapter<GroupieViewHolder>()
-    var toUser: UserA? = null
+    var toUser: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
-        toUser = intent.getParcelableExtra<UserA>(NewMessageActivity.USER_KEY)
+        toUser = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
 
         supportActionBar?.title = toUser?.username
 
@@ -45,7 +45,7 @@ class ChatLogActivity : AppCompatActivity() {
     private fun performSendMessage() {
         val fromID = FirebaseAuth.getInstance().uid.toString()
         //need delete?
-        val user = intent.getParcelableExtra<UserA>(NewMessageActivity.USER_KEY)
+        val user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
         val toID = toUser?.uid.toString()
 
         val text = edit_text_chat_log.text.toString()
@@ -120,7 +120,7 @@ class ChatLogActivity : AppCompatActivity() {
     }
 }
 
-class ChatFromItem(val text: String, private val user: UserA) : Item<GroupieViewHolder>() {
+class ChatFromItem(val text: String, private val user: User) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.textView_from_row.text = text
 
@@ -133,7 +133,7 @@ class ChatFromItem(val text: String, private val user: UserA) : Item<GroupieView
     }
 }
 
-class ChatToItem(val text: String, private val user: UserA) : Item<GroupieViewHolder>() {
+class ChatToItem(val text: String, private val user: User) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.textView_to_row.text = text
         //add image

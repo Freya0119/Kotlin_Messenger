@@ -23,7 +23,7 @@ import com.xwray.groupie.GroupieAdapter as XwrayGroupieGroupieAdapter
 class LatestMessageActivity : AppCompatActivity() {
 
     companion object {
-        var currentUser: UserA? = null
+        var currentUser: User? = null
         val TAG = "LatestMessage"
     }
 
@@ -43,20 +43,20 @@ class LatestMessageActivity : AppCompatActivity() {
         )
         //click then open 對話紀錄
         adapter.setOnItemClickListener { item, view ->
-            Log.d(TAG, "123")
+            Log.d("LATEST", "Enter a room.")
+
             val intent = Intent(this, ChatLogActivity::class.java)
             //被點擊 item 作為 LatestMessageRow 物件
             val row = item as LatestMessageRow
-            //通過 USER_KEY link row.chatPartnerUser
-            //ChatLogActivity 需要一個user uid?所以通過USER_KEY link?
+            //通過 USER_KEY 連結 row.chatPartnerUser
             intent.putExtra(NewMessageActivity.USER_KEY, row.chatPartnerUser)
             startActivity(intent)
         }
-        //setupDummyRows()
+        //TODO 功能
         listenLatestMessage()
-
+        //TODO 功能
         fetchCurrentUser()
-
+        //TODO 功能
         verifyUserIsLoggedIn()
     }
 
@@ -69,13 +69,6 @@ class LatestMessageActivity : AppCompatActivity() {
         latestMessageMap.values.forEach {
             adapter.add(LatestMessageRow(it))
         }
-    }
-
-    //加載user和最後消息
-    private fun setupDummyRows() {
-//        adapter.add(LatestMessageRow())
-//
-//        recycle_latest_messages.adapter = adapter
     }
 
     //監聽latest message
@@ -115,7 +108,7 @@ class LatestMessageActivity : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
-                val currentUser = p0.getValue(UserA::class.java)
+                val currentUser = p0.getValue(User::class.java)
                 Log.d("Latest Message", "Current user: ${currentUser?.profileImageUrl}")
             }
 

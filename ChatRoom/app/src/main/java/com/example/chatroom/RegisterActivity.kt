@@ -26,8 +26,10 @@ class RegisterActivity : AppCompatActivity() {
         }
         //登陸button
         bt_login.setOnClickListener() {
-            val intent = Intent(this, LatestMessageActivity::class.java)
-            startActivity(intent)
+            if ((edit_text_username.text.isEmpty()) || (edit_text_password.text.isEmpty())) {
+                Toast.makeText(this, "It is empty. Enter something.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
             //通過firebase驗證，所以不需要自己驗證email and password
             FirebaseAuth.getInstance().signInWithEmailAndPassword(
@@ -35,16 +37,26 @@ class RegisterActivity : AppCompatActivity() {
                 edit_text_password.text.toString()
             ).addOnSuccessListener {
                 Log.d("LOGIN", "Login Successful, try to into latest message.")
+                Toast.makeText(
+                    this,
+                    "Login Successful, try to into latest message.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }.addOnFailureListener {
                 Log.d("LOGIN", "Login failed.")
+                Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT).show()
             }
+
+            val intent = Intent(this, LatestMessageActivity::class.java)
+            startActivity(intent)
         }
         //選擇圖片作為照片button
         bt_selected_photo.setOnClickListener() {
             Log.d("IMAGE", "Click button for choose a picture.")
-            //???
+            Toast.makeText(this, "Select image cannot be used now.", Toast.LENGTH_SHORT).show()
+            //跳到選擇本地image的位置
             val intent = Intent(Intent.ACTION_PICK)
-            //選取image位置?
+            //選取本地image位置?
             intent.type = "image/*"
             //後面的onActivityResult
             startActivityForResult(intent, 0)
@@ -77,7 +89,7 @@ class RegisterActivity : AppCompatActivity() {
                     "REGISTER",
                     "Register successful, uid: ${it.result.user?.uid}. Try to upload image to Firebase."
                 )
-                //儲存到firebase
+                //儲存到firebase 暫時禁用
                 uploadImageToFirebaseStorage()
             }
             .addOnFailureListener {
