@@ -41,7 +41,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_button"
-        android:text="click register"
+        android:text="CLICK REGISTER"
         app:layout_constraintEnd_toEndOf="@+id/edit_text_password"
         app:layout_constraintStart_toStartOf="@+id/edit_text_password"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_password" />
@@ -52,7 +52,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_button"
-        android:text="click login"
+        android:text="CLICK LOGIN"
         app:layout_constraintEnd_toEndOf="@+id/edit_text_password"
         app:layout_constraintStart_toStartOf="@+id/edit_text_password"
         app:layout_constraintTop_toBottomOf="@+id/bt_register" />
@@ -61,12 +61,12 @@
         android:id="@+id/bt_selected_photo"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:background="@drawable/rounded_selected_photo_button"
+        android:text="I AM PHOTO"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.25" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/selected_photo_imageview_register"
@@ -77,5 +77,13 @@
         app:layout_constraintEnd_toEndOf="@+id/bt_selected_photo"
         app:layout_constraintStart_toStartOf="@+id/bt_selected_photo"
         app:layout_constraintTop_toTopOf="@+id/bt_selected_photo" />
+
+    <ImageView
+        android:id="@+id/imageView_test_set_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="144dp"
+        tools:layout_editor_absoluteY="560dp"
+        tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

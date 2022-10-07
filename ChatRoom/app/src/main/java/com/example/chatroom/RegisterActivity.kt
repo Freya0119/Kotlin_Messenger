@@ -2,10 +2,13 @@ package com.example.chatroom
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
@@ -53,7 +56,6 @@ class RegisterActivity : AppCompatActivity() {
         //選擇圖片作為照片button
         bt_selected_photo.setOnClickListener() {
             Log.d("IMAGE", "Click button for choose a picture.")
-            Toast.makeText(this, "Select image cannot be used now.", Toast.LENGTH_SHORT).show()
             //跳到選擇本地image的位置
             val intent = Intent(Intent.ACTION_PICK)
             //選取本地image位置?
@@ -83,14 +85,15 @@ class RegisterActivity : AppCompatActivity() {
         FirebaseAuth.getInstance()
             .createUserWithEmailAndPassword(strUsername, strPassword)
             .addOnCompleteListener {
-                //return@addOnCompleteListener?
+                //如果不成功?
                 if (!it.isSuccessful) return@addOnCompleteListener
+
                 Log.d(
                     "REGISTER",
                     "Register successful, uid: ${it.result.user?.uid}. Try to upload image to Firebase."
                 )
                 //儲存到firebase 暫時禁用
-                uploadImageToFirebaseStorage()
+                //uploadImageToFirebaseStorage()
             }
             .addOnFailureListener {
                 Log.d("REGISTER", "Register failed, message: ${it.message}.")
@@ -98,7 +101,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     //被設置的圖片，因為會被改變所以放在外面?
-    var selectedPhotoUri: Uri? = null
+    private var selectedPhotoUri: Uri? = null
 
     //從選擇照片返回register介面?onActivityResult有獲取返回值的功能
     //和bt_select_image的startActivityForResult回應
@@ -110,14 +113,21 @@ class RegisterActivity : AppCompatActivity() {
         //選擇成功
         if (requestCode == 0 && data != null && resultCode == Activity.RESULT_OK) {
             Log.d("IMAGE", "Select photo successful.")
+
+            selectedPhotoUri = data.data
+
+            //設置photo和邊框
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
+//            selected_photo_imageview_register.setImageBitmap(bitmap)
+//            selected_photo_imageview_register.alpha = 0f
+            Toast.makeText(this, "${bitmap.toString()}", Toast.LENGTH_LONG).show()
+
+            //test
+            imageView_test_set_image.setImageBitmap(bitmap)
+
+            val bitmapDrawable = BitmapDrawable(bitmap)
+            bt_selected_photo.setBackgroundDrawable(bitmapDrawable)
         }
-        selectedPhotoUri = data?.data
-
-        //設置photo和邊框
-        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
-
-        selected_photo_imageview_register.setImageBitmap(bitmap)
-        selected_photo_imageview_register.alpha = 0f
     }
 
     //upload照片
