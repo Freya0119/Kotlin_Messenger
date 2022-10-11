@@ -15,12 +15,24 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/rounded_edittext_register_login"
-        android:hint="username"
-        android:inputType="textEmailAddress"
+        android:hint="USERNAME"
         android:paddingLeft="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bt_selected_photo" />
+
+    <EditText
+        android:id="@+id/edit_text_email"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_edittext_register_login"
+        android:hint="EMAIL"
+        android:inputType="textEmailAddress"
+        android:paddingLeft="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_username"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_username"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_username" />
 
     <EditText
         android:id="@+id/edit_text_password"
@@ -28,19 +40,19 @@
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_edittext_register_login"
-        android:hint="password"
+        android:hint="PASSWORD"
         android:inputType="textPassword"
         android:paddingLeft="16dp"
         app:layout_constraintEnd_toEndOf="@+id/edit_text_username"
         app:layout_constraintStart_toStartOf="@+id/edit_text_username"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_username" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_email" />
+
 
     <Button
         android:id="@+id/bt_register"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_button"
         android:text="CLICK REGISTER"
         app:layout_constraintEnd_toEndOf="@+id/edit_text_password"
         app:layout_constraintStart_toStartOf="@+id/edit_text_password"
@@ -51,7 +63,6 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_button"
         android:text="CLICK LOGIN"
         app:layout_constraintEnd_toEndOf="@+id/edit_text_password"
         app:layout_constraintStart_toStartOf="@+id/edit_text_password"
@@ -61,7 +72,7 @@
         android:id="@+id/bt_selected_photo"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:text="I AM PHOTO"
+        android:text="CHOOSE PHOTO"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,13 +88,5 @@
         app:layout_constraintEnd_toEndOf="@+id/bt_selected_photo"
         app:layout_constraintStart_toStartOf="@+id/bt_selected_photo"
         app:layout_constraintTop_toTopOf="@+id/bt_selected_photo" />
-
-    <ImageView
-        android:id="@+id/imageView_test_set_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="144dp"
-        tools:layout_editor_absoluteY="560dp"
-        tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

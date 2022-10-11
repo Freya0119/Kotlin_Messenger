@@ -12,11 +12,13 @@ import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.graphics.drawable.toDrawable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.auth.User
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_register.*
+import kotlinx.android.synthetic.main.activity_register.view.*
 import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
@@ -69,21 +71,19 @@ class RegisterActivity : AppCompatActivity() {
     private fun performRegister() {
         //email password字串
         val strUsername = edit_text_username.text.toString()
+        val strEmail = edit_text_email.text.toString()
         val strPassword = edit_text_password.text.toString()
 
         //如果其中一個為空
-        if ((strUsername.isEmpty()) || (strPassword.isEmpty())) {
+        if ((strUsername.isEmpty()) || (strEmail.isEmpty()) || (strPassword.isEmpty())) {
             Toast.makeText(this, "It is empty. Enter something.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        Log.d("SHOW", "Usr name is ${strUsername}, try to register or login.")
-        Log.d("SHOW", "Password is ${strPassword}, try to register or login.")
-
         //發送註冊
         //這裡已經註冊用戶 firebaseAuth有data 所以後面可以取得uid
         FirebaseAuth.getInstance()
-            .createUserWithEmailAndPassword(strUsername, strPassword)
+            .createUserWithEmailAndPassword(strEmail, strPassword)
             .addOnCompleteListener {
                 //如果不成功?
                 if (!it.isSuccessful) return@addOnCompleteListener
@@ -93,7 +93,7 @@ class RegisterActivity : AppCompatActivity() {
                     "Register successful, uid: ${it.result.user?.uid}. Try to upload image to Firebase."
                 )
                 //儲存到firebase 暫時禁用
-                //uploadImageToFirebaseStorage()
+                uploadImageToFirebaseStorage()
             }
             .addOnFailureListener {
                 Log.d("REGISTER", "Register failed, message: ${it.message}.")
@@ -117,25 +117,20 @@ class RegisterActivity : AppCompatActivity() {
             selectedPhotoUri = data.data
 
             //設置photo和邊框
+            bt_selected_photo.alpha = 0f
+
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
-//            selected_photo_imageview_register.setImageBitmap(bitmap)
-//            selected_photo_imageview_register.alpha = 0f
-            Toast.makeText(this, "${bitmap.toString()}", Toast.LENGTH_LONG).show()
-
-            //test
-            imageView_test_set_image.setImageBitmap(bitmap)
-
-            val bitmapDrawable = BitmapDrawable(bitmap)
-            bt_selected_photo.setBackgroundDrawable(bitmapDrawable)
+            selected_photo_imageview_register.setImageBitmap(bitmap)
         }
     }
 
     //upload照片
     private fun uploadImageToFirebaseStorage() {
         if (selectedPhotoUri == null) return
-        //save with uid
+
         val uid = FirebaseAuth.getInstance().uid
         //這裡是儲存到storage 所以位置和user message不一樣
+        //image名稱是uid
         val ref = FirebaseStorage.getInstance().getReference("image/${uid}")
         //upload image
         ref.putFile(selectedPhotoUri!!).addOnSuccessListener {
@@ -148,28 +143,25 @@ class RegisterActivity : AppCompatActivity() {
                 "IMAGE", "Image url: ${it.toString()} successful. Try to save user to Firebase."
             )
             //save user to firebaseDatabase with imageUrl
-            //TODO move to bt_login?
             saveUserToFirebaseDatabase(it.toString())
-        }.addOnFailureListener {
-            Log.d("IMAGE", "Image url: ${it.toString()} failed.")
         }
     }
 
     //儲存到firebase
     private fun saveUserToFirebaseDatabase(profileImageUrl: String) {
         val uid = FirebaseAuth.getInstance().uid ?: ""
-
         val ref = FirebaseDatabase.getInstance().getReference("user/${uid}")
 
         val user = User(uid, edit_text_username.text.toString(), profileImageUrl)
 
         ref.setValue(user).addOnSuccessListener {
             Log.d("SAVE USER TO FIREBASE", "Save user successful. Try into latest message.")
+            //TODO next test
             //註冊完成並打開latest message
-            val intent = Intent(this, LatestMessageActivity::class.java)
-            //清除所有TASK並且把latestMessage_activity設為新的TASK?
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+//            val intent = Intent(this, LatestMessageActivity::class.java)
+//            //清除所有TASK並且把latestMessage_activity設為新的TASK?
+//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            startActivity(intent)
         }
     }
 }
