@@ -16,7 +16,9 @@ import androidx.core.graphics.drawable.toDrawable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.auth.User
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.activity_register.view.*
 import java.util.*
@@ -31,14 +33,14 @@ class RegisterActivity : AppCompatActivity() {
         }
         //登陸button
         bt_login.setOnClickListener() {
-            if ((edit_text_username.text.isEmpty()) || (edit_text_password.text.isEmpty())) {
+            if ((edit_text_email.text.isEmpty()) || (edit_text_password.text.isEmpty())) {
                 Toast.makeText(this, "It is empty. Enter something.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             //通過firebase驗證，所以不需要自己驗證email and password
             FirebaseAuth.getInstance().signInWithEmailAndPassword(
-                edit_text_username.text.toString(),
+                edit_text_email.text.toString(),
                 edit_text_password.text.toString()
             ).addOnSuccessListener {
                 Log.d("LOGIN", "Login Successful, try to into latest message.")
@@ -51,8 +53,10 @@ class RegisterActivity : AppCompatActivity() {
                 Log.d("LOGIN", "Login failed.")
                 Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT).show()
             }
-
-            val intent = Intent(this, LatestMessageActivity::class.java)
+            //login latest activity
+//            val intent = Intent(this, LatestMessageActivity::class.java)
+            //TEST login new log activity
+            val intent = Intent(this, ChatLogActivity::class.java)
             startActivity(intent)
         }
         //選擇圖片作為照片button
@@ -132,36 +136,44 @@ class RegisterActivity : AppCompatActivity() {
         //這裡是儲存到storage 所以位置和user message不一樣
         //image名稱是uid
         val ref = FirebaseStorage.getInstance().getReference("image/${uid}")
-        //upload image
+        //upload image and create user to FirebaseDatabase
         ref.putFile(selectedPhotoUri!!).addOnSuccessListener {
             Log.d("IMAGE", "Upload image to: ${it.metadata?.path}.")
-        }
-        //???downloadUrl onActivityResult的時候改變了image
-        //儲存以後打開上傳到firebase 為了把image path傳給saveUserToFirebaseDatabase 再存入user/
-        ref.downloadUrl.addOnSuccessListener {
-            Log.d(
-                "IMAGE", "Image url: ${it.toString()} successful. Try to save user to Firebase."
-            )
-            //save user to firebaseDatabase with imageUrl
-            saveUserToFirebaseDatabase(it.toString())
+
+            //downloadUrl需要配合putFile 作用是下載url???
+            //儲存以後打開上傳到firebase 為了把image path傳給saveUserToFirebaseDatabase 再存入/user/
+            ref.downloadUrl.addOnSuccessListener {
+                Toast.makeText(
+                    this,
+                    "Image url: ${it.toString()} successful. Try to save user to FirebaseDatabase.",
+                    Toast.LENGTH_LONG
+                ).show()
+                //save user to firebaseDatabase with imageUrl
+                saveUserToFirebaseDatabase(it.toString())
+            }.addOnFailureListener {
+                Toast.makeText(this, "Download url failed.", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
     //儲存到firebase
     private fun saveUserToFirebaseDatabase(profileImageUrl: String) {
         val uid = FirebaseAuth.getInstance().uid ?: ""
-        val ref = FirebaseDatabase.getInstance().getReference("user/${uid}")
+        val ref = FirebaseDatabase.getInstance()
+            .getReference("/user/${uid}")
 
         val user = User(uid, edit_text_username.text.toString(), profileImageUrl)
 
         ref.setValue(user).addOnSuccessListener {
-            Log.d("SAVE USER TO FIREBASE", "Save user successful. Try into latest message.")
+            Toast.makeText(this, "Save into FirebaseDatabase successful.", Toast.LENGTH_LONG).show()
             //TODO next test
             //註冊完成並打開latest message
-//            val intent = Intent(this, LatestMessageActivity::class.java)
-//            //清除所有TASK並且把latestMessage_activity設為新的TASK?
-//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            startActivity(intent)
+            val intent = Intent(this, LatestMessageActivity::class.java)
+            //清除所有TASK並且把latestMessage_activity設為新的TASK?
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }.addOnFailureListener {
+            Toast.makeText(this, "Save into FirebaseDatabase failed.", Toast.LENGTH_LONG).show()
         }
     }
 }
