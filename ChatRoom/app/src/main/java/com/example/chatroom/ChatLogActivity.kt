@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.chat_to_row.view.*
 
 class ChatLogActivity : AppCompatActivity() {
     companion object {
-        val TAG = "Chat Log"
+        const val TAG = "CHAT LOG"
     }
 
     //adapter
@@ -29,13 +29,16 @@ class ChatLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
+        //傳送對象toUser從哪裡new message activity取得?
         toUser = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
 
+        //設置菜單欄
         supportActionBar?.title = toUser?.username
 
         recycle_chat_log.adapter = adapter
 
-        send_button_chat_log.setOnClickListener() {
+        //發送聊天訊息
+        button_send_chat_log.setOnClickListener() {
             Log.d(TAG, "this is send button")
         }
         listenForMessage()
@@ -78,7 +81,7 @@ class ChatLogActivity : AppCompatActivity() {
         toLatestMessageRef.setValue(chatMessage)
     }
 
-    //new接收firebase資料
+    //發送聊天訊息
     private fun listenForMessage() {
         val fromID = FirebaseAuth.getInstance().uid.toString()
         val toID = toUser?.uid.toString()

@@ -13,12 +13,12 @@
         android:paddingLeft="16dp"
         android:text="Enter Message"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/send_button_chat_log"
+        app:layout_constraintEnd_toStartOf="@+id/button_send_chat_log"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recycle_chat_log" />
 
     <Button
-        android:id="@+id/send_button_chat_log"
+        android:id="@+id/button_send_chat_log"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="send"

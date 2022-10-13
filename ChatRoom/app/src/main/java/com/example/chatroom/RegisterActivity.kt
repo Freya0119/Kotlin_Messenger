@@ -56,7 +56,7 @@ class RegisterActivity : AppCompatActivity() {
             //login latest activity
 //            val intent = Intent(this, LatestMessageActivity::class.java)
             //TEST login new log activity
-            val intent = Intent(this, ChatLogActivity::class.java)
+            val intent = Intent(this, NewMessageActivity::class.java)
             startActivity(intent)
         }
         //選擇圖片作為照片button
