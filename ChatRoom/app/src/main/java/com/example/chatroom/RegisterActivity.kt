@@ -13,6 +13,7 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
+import com.example.chatroom.NewMessageActivity.Companion.USER_KEY
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.auth.User
@@ -57,6 +58,10 @@ class RegisterActivity : AppCompatActivity() {
 //            val intent = Intent(this, LatestMessageActivity::class.java)
             //TEST login new log activity
             val intent = Intent(this, NewMessageActivity::class.java)
+
+            //TEST testUser object for trans
+            val testUser = User("", "test user", "")
+            intent.putExtra(USER_KEY, testUser)
             startActivity(intent)
         }
         //選擇圖片作為照片button

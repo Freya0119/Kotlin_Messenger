@@ -13,7 +13,6 @@
         android:text="TextView"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/imageview_new_message"
         app:layout_constraintStart_toEndOf="@+id/imageview_new_message"
         app:layout_constraintTop_toTopOf="@+id/imageview_new_message" />
 
@@ -24,8 +23,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        app:civ_border_color="@color/black"
-        app:civ_border_width="5dp"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

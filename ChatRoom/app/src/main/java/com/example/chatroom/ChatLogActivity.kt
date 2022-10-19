@@ -30,6 +30,7 @@ class ChatLogActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat_log)
 
         //傳送對象toUser從哪裡new message activity取得?
+        //getParcelableExtra 接收putExtra傳過來的userItem???
         toUser = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
 
         //設置菜單欄
@@ -41,7 +42,7 @@ class ChatLogActivity : AppCompatActivity() {
         button_send_chat_log.setOnClickListener() {
             Log.d(TAG, "this is send button")
         }
-        listenForMessage()
+        //listenForMessage()
     }
 
     //生成對話框
