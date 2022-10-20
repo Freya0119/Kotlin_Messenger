@@ -5,20 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView_from_row"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:text="talk something"
-        app:layout_constraintStart_toEndOf="@+id/image_view_chat_from"
-        tools:layout_editor_absoluteX="66dp"
-        tools:layout_editor_absoluteY="31dp" />
-
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_view_chat_from"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="31dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/textView_from_row"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Say something."
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/image_view_chat_from"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/image_view_chat_from" />
 </androidx.constraintlayout.widget.ConstraintLayout>

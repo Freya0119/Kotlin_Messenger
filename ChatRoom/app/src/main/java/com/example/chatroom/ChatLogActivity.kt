@@ -3,18 +3,21 @@ package com.example.chatroom
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import com.example.chatroom.LatestMessageActivity.Companion.currentUser
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_chat_log.*
+import kotlinx.android.synthetic.main.activity_new_message.*
 import kotlinx.android.synthetic.main.chat_from_row.view.*
 import kotlinx.android.synthetic.main.chat_to_row.view.*
+import kotlinx.android.synthetic.main.new_message_row.*
+import java.util.*
 
 class ChatLogActivity : AppCompatActivity() {
     companion object {
@@ -29,8 +32,7 @@ class ChatLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
-        //傳送對象toUser從哪裡new message activity取得?
-        //getParcelableExtra 接收putExtra傳過來的userItem???
+        //getParcelableExtra 接收putExtra傳過來的userItem???傳過來的是被選擇交談的user
         toUser = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
 
         //設置菜單欄
@@ -41,21 +43,43 @@ class ChatLogActivity : AppCompatActivity() {
         //發送聊天訊息
         button_send_chat_log.setOnClickListener() {
             Log.d(TAG, "this is send button")
+            performSendMessage()
         }
+        fetchCurrentUser()
+        //loadMessageBefore()
         //listenForMessage()
     }
 
-    //生成對話框
-    private fun performSendMessage() {
-        val fromID = FirebaseAuth.getInstance().uid.toString()
-        //need delete?
-        val user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
-        val toID = toUser?.uid.toString()
+    val currentUser: User? = null
+    private fun fetchCurrentUser() {
+        val uid = FirebaseAuth.getInstance().uid.toString()
+        val ref = FirebaseDatabase.getInstance().getReference("user/$uid")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
 
+            override fun onDataChange(snapshot: DataSnapshot) {
+                TODO("Not yet implemented")
+                currentUser = snapshot.getValue(User::class.java)
+                if (currentUser != null) {
+                    Toast.makeText(this, currentUser.username, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
+    //生成發送對話框
+    private fun performSendMessage() {
+        //val user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
+        //from me
+        val fromID = FirebaseAuth.getInstance().uid.toString()
+        //to who be choose
+        val toID = toUser?.uid.toString()
         val text = edit_text_chat_log.text.toString()
         //push message裡面的
-        val reference = FirebaseDatabase.getInstance().getReference("/user-message/$fromID/$toID")
-        val toReference = FirebaseDatabase.getInstance().getReference("/user-message/$toID/$fromID")
+        val reference = FirebaseDatabase.getInstance().getReference("/message/$fromID/$toID")
+        val toReference = FirebaseDatabase.getInstance().getReference("/message/$toID/$fromID")
         //chatMessage object 包括fromID toID UserA text 時間
         val chatMessage = ChatMessage(
             reference.key!!,
@@ -67,13 +91,14 @@ class ChatLogActivity : AppCompatActivity() {
         //set 傳edit內容給firebase
         reference.setValue(chatMessage).addOnSuccessListener {
             Log.d(TAG, "Saved our chat message: ${reference.key}")
-            //clear edit text的內容
-            edit_text_chat_log.text.clear()
             //拉到最後一條消息
             recycle_chat_log.scrollToPosition(adapter.itemCount - 1)
+            //clear edit text的內容
+            edit_text_chat_log.text.clear()
         }
         toReference.setValue(chatMessage)
-        //latest message perform
+
+        //latest message perform???紀錄最後一條顯示在聊天室
         val latestMessageRef =
             FirebaseDatabase.getInstance().getReference("latest-messages/$fromID/$toID")
         latestMessageRef.setValue(chatMessage)
@@ -82,12 +107,35 @@ class ChatLogActivity : AppCompatActivity() {
         toLatestMessageRef.setValue(chatMessage)
     }
 
-    //發送聊天訊息
+    //load聊天紀錄
+    private fun loadMessageBefore() {
+        val fromID = FirebaseAuth.getInstance().uid?.toString()
+        val toID = toUser?.uid.toString()
+        val logRef = FirebaseDatabase.getInstance().getReference("/message/$fromID/$toID")
+        logRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                TODO("Not yet implemented")
+                p0.children.forEach {
+                    val chatItem = it.getValue(ChatMessage::class.java)
+                    if (chatItem != null) {
+                        adapter.add(ChatFromItem("test", currentUser!!))
+                    }
+                }
+                recycle_chat_log.adapter = adapter
+            }
+        })
+    }
+
+    //檢查聊天訊息更新
     private fun listenForMessage() {
         val fromID = FirebaseAuth.getInstance().uid.toString()
         val toID = toUser?.uid.toString()
 
-        val ref = FirebaseDatabase.getInstance().getReference("/user-message/$fromID/$toID")
+        val ref = FirebaseDatabase.getInstance().getReference("/message/$fromID/$toID")
         ref.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                 val chatMessage = p0.getValue(ChatMessage::class.java)
@@ -127,7 +175,6 @@ class ChatLogActivity : AppCompatActivity() {
 class ChatFromItem(val text: String, private val user: User) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.textView_from_row.text = text
-
         val uri = user.profileImageUrl
         Picasso.get().load(uri).into(viewHolder.itemView.image_view_chat_from)
     }

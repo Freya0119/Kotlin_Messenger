@@ -39,9 +39,6 @@ class LatestMessageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lateest_message)
 
-        //test
-        Toast.makeText(this, "Something to do.", Toast.LENGTH_LONG).show()
-
 //        recycle_latest_messages.adapter = adapter
 //        //添加用戶之間的分隔線
 //        recycle_latest_messages.addItemDecoration(
@@ -63,7 +60,7 @@ class LatestMessageActivity : AppCompatActivity() {
 //        }
         //TODO 功能???
         listenLatestMessage()
-        //TODO 功能???
+        //TODO 功能???抓現在登陸user
 //        fetchCurrentUser()
         //TODO 功能???
 //        verifyUserIsLoggedIn()
@@ -75,9 +72,7 @@ class LatestMessageActivity : AppCompatActivity() {
     //加載latest message
     private fun listenLatestMessage() {
         val fromID = FirebaseAuth.getInstance().uid
-        //val latestMessageRef = FirebaseDatabase.getInstance().getReference("latest-message/$fromID")
 
-        //test path version 1.0
         val latestMessageRef = FirebaseDatabase.getInstance().getReference("/user/$fromID")
         //get image to imageview
         latestMessageRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -122,7 +117,7 @@ class LatestMessageActivity : AppCompatActivity() {
     //fetch user
     private fun fetchCurrentUser() {
         val uid = FirebaseAuth.getInstance().uid
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+        val ref = FirebaseDatabase.getInstance().getReference("/user/$uid")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val currentUser = p0.getValue(User::class.java)

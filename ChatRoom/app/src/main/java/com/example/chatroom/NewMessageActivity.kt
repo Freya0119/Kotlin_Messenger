@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.chatroom.LatestMessageActivity.Companion.currentUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -28,6 +29,7 @@ class NewMessageActivity : AppCompatActivity() {
         //通過key取得username?
         // get USER_KEY 前面要加入USER_KEY為暗號，這裡要設定USER_KEY為cons，暗號對上才能設置
         val user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
+
         supportActionBar?.title = user?.username
         //抓user
         fetchUsers()

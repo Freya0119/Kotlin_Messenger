@@ -50,19 +50,20 @@ class RegisterActivity : AppCompatActivity() {
                     "Login Successful, try to into latest message.",
                     Toast.LENGTH_SHORT
                 ).show()
+                //login latest activity
+//            val intent = Intent(this, LatestMessageActivity::class.java)
+                //TEST login new log activity
+                val intent = Intent(this, NewMessageActivity::class.java)
+
+                //TEST testUser object for trans
+                val testUser = User("", "test user", "")
+                intent.putExtra(USER_KEY, testUser)
+                startActivity(intent)
             }.addOnFailureListener {
                 Log.d("LOGIN", "Login failed.")
                 Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT).show()
+                return@addOnFailureListener
             }
-            //login latest activity
-//            val intent = Intent(this, LatestMessageActivity::class.java)
-            //TEST login new log activity
-            val intent = Intent(this, NewMessageActivity::class.java)
-
-            //TEST testUser object for trans
-            val testUser = User("", "test user", "")
-            intent.putExtra(USER_KEY, testUser)
-            startActivity(intent)
         }
         //選擇圖片作為照片button
         bt_selected_photo.setOnClickListener() {
