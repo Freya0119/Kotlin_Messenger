@@ -37,7 +37,7 @@ class ChatLogActivity : AppCompatActivity() {
 
         //設置菜單欄
         supportActionBar?.title = toUser?.username
-
+        //監聽adapter?
         recycle_chat_log.adapter = adapter
 
         //發送聊天訊息
@@ -52,8 +52,7 @@ class ChatLogActivity : AppCompatActivity() {
 
     val currentUser: User? = null
     private fun fetchCurrentUser() {
-        val uid = FirebaseAuth.getInstance().uid.toString()
-        val ref = FirebaseDatabase.getInstance().getReference("user/$uid")
+        val ref = FirebaseDatabase.getInstance().getReference("/user")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
@@ -61,10 +60,12 @@ class ChatLogActivity : AppCompatActivity() {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 TODO("Not yet implemented")
-                currentUser = snapshot.getValue(User::class.java)
-                if (currentUser != null) {
-                    Toast.makeText(this, currentUser.username, Toast.LENGTH_SHORT).show()
-                }
+//                snapshot.children.forEach {
+//                    val eachUser = it.getValue(User::class.java)
+//                    if (eachUser?.uid == uid) {
+//                        currentUser = eachUser
+//                    }
+//                }
             }
         })
     }
