@@ -46,11 +46,11 @@ class ChatLogActivity : AppCompatActivity() {
             performSendMessage()
         }
         fetchCurrentUser()
-        //loadMessageBefore()
-        //listenForMessage()
+        loadMessageBefore()
+        listenForMessage()
     }
 
-    val currentUser: User? = null
+    var currentUser: User? = null
     private fun fetchCurrentUser() {
         val ref = FirebaseDatabase.getInstance().getReference("/user")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -59,13 +59,13 @@ class ChatLogActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                TODO("Not yet implemented")
-//                snapshot.children.forEach {
-//                    val eachUser = it.getValue(User::class.java)
-//                    if (eachUser?.uid == uid) {
-//                        currentUser = eachUser
-//                    }
-//                }
+                val uid = FirebaseAuth.getInstance().uid
+                snapshot.children.forEach {
+                    val eachUser = it.getValue(User::class.java)
+                    if (eachUser?.uid == uid) {
+                        currentUser = eachUser
+                    }
+                }
             }
         })
     }
@@ -119,12 +119,9 @@ class ChatLogActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                TODO("Not yet implemented")
-                p0.children.forEach {
-                    val chatItem = it.getValue(ChatMessage::class.java)
-                    if (chatItem != null) {
-                        adapter.add(ChatFromItem("test", currentUser!!))
-                    }
+                val chatItem = p0.getValue(ChatMessage::class.java)
+                if (chatItem != null) {
+                    adapter.add(ChatFromItem("${chatItem.text}", currentUser!!))
                 }
                 recycle_chat_log.adapter = adapter
             }
@@ -144,30 +141,31 @@ class ChatLogActivity : AppCompatActivity() {
                     Log.d(TAG, chatMessage.text)
                     //判斷id為me or you
                     if (chatMessage.formID == FirebaseAuth.getInstance().uid) {
-                        val currentUser = LatestMessageActivity.currentUser
-                        adapter.add(ChatFromItem(chatMessage.text, currentUser!!))
+//                        val currentUser = LatestMessageActivity.currentUser
+                        adapter.add(ChatFromItem("${chatMessage.text}", currentUser!!))
                     } else {
-                        adapter.add(ChatToItem(chatMessage.text, toUser!!))
+                        adapter.add(ChatToItem("${chatMessage.text}", toUser!!))
                     }
                 }
+                recycle_chat_log.adapter = adapter
                 //拉消息到最下面
                 recycle_chat_log.scrollToPosition(adapter.itemCount - 1)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+//                TODO("Not yet implemented")
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
+//                TODO("Not yet implemented")
             }
 
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
+//                TODO("Not yet implemented")
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
-                TODO("Not yet implemented")
+//                TODO("Not yet implemented")
             }
         })
     }
