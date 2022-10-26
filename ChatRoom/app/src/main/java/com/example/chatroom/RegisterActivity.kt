@@ -15,7 +15,10 @@ import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
 import com.example.chatroom.NewMessageActivity.Companion.USER_KEY
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -32,39 +35,6 @@ class RegisterActivity : AppCompatActivity() {
         bt_register.setOnClickListener() {
             performRegister()
         }
-        //登陸button
-        bt_login.setOnClickListener() {
-            if ((edit_text_email.text.isEmpty()) || (edit_text_password.text.isEmpty())) {
-                Toast.makeText(this, "It is empty. Enter something.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            //通過firebase驗證，所以不需要自己驗證email and password
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(
-                edit_text_email.text.toString(),
-                edit_text_password.text.toString()
-            ).addOnSuccessListener {
-                Log.d("LOGIN", "Login Successful, try to into latest message.")
-                Toast.makeText(
-                    this,
-                    "Login Successful, try to into latest message.",
-                    Toast.LENGTH_SHORT
-                ).show()
-                //login latest activity
-//            val intent = Intent(this, LatestMessageActivity::class.java)
-                //TEST login new log activity
-                val intent = Intent(this, NewMessageActivity::class.java)
-
-                //TEST testUser object for trans
-                val testUser = User("", "test user", "")
-                intent.putExtra(USER_KEY, testUser)
-                startActivity(intent)
-            }.addOnFailureListener {
-                Log.d("LOGIN", "Login failed.")
-                Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT).show()
-                return@addOnFailureListener
-            }
-        }
         //選擇圖片作為照片button
         bt_selected_photo.setOnClickListener() {
             Log.d("IMAGE", "Click button for choose a picture.")
@@ -75,7 +45,40 @@ class RegisterActivity : AppCompatActivity() {
             //後面的onActivityResult
             startActivityForResult(intent, 0)
         }
+        //登陸button
+        bt_login.setOnClickListener() {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+//            if ((edit_text_email.text.isEmpty()) || (edit_text_password.text.isEmpty())) {
+//                Toast.makeText(this, "It is empty. Enter something.", Toast.LENGTH_SHORT).show()
+//                return@setOnClickListener
+//            }
+//
+//            //通過firebase驗證，所以不需要自己驗證email and password
+//            FirebaseAuth.getInstance().signInWithEmailAndPassword(
+//                edit_text_email.text.toString(),
+//                edit_text_password.text.toString()
+//            ).addOnSuccessListener {
+//                Log.d("LOGIN", "Login Successful, try to into latest message.")
+//                Toast.makeText(
+//                    this,
+//                    "Login Successful, try to into latest message.",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//                //login latest activity
+////            val intent = Intent(this, LatestMessageActivity::class.java)
+//                //TEST login new log activity
+//                val intent = Intent(this, NewMessageActivity::class.java)
+//
+//                //how to get user and trans
+//                val currentUser = User("${it.user?.uid}", "test user", "")
+//                intent.putExtra(USER_KEY, currentUser)
+//                startActivity(intent)
+//            }
+        }
     }
+
+    val currentUser: User? = null
 
     //註冊
     private fun performRegister() {
@@ -156,8 +159,6 @@ class RegisterActivity : AppCompatActivity() {
                 ).show()
                 //save user to firebaseDatabase with imageUrl
                 saveUserToFirebaseDatabase(it.toString())
-            }.addOnFailureListener {
-                Toast.makeText(this, "Download url failed.", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -178,8 +179,6 @@ class RegisterActivity : AppCompatActivity() {
             //清除所有TASK並且把latestMessage_activity設為新的TASK?
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
-        }.addOnFailureListener {
-            Toast.makeText(this, "Save into FirebaseDatabase failed.", Toast.LENGTH_LONG).show()
         }
     }
 }

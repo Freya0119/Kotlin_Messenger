@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_view_chat_from"
@@ -19,9 +19,19 @@
         android:id="@+id/textView_from_row"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Say something."
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:text="Say something."
         app:layout_constraintBottom_toBottomOf="@+id/image_view_chat_from"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_view_chat_from" />
+
+    <TextView
+        android:id="@+id/chat_from_row_username_textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="user name"
+        app:layout_constraintStart_toEndOf="@+id/image_view_chat_from"
+        app:layout_constraintTop_toTopOf="@+id/image_view_chat_from" />
 </androidx.constraintlayout.widget.ConstraintLayout>

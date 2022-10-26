@@ -14,8 +14,11 @@
         android:theme="@style/Theme.ChatRoom"
         tools:targetApi="31">
         <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".LatestMessageActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".RegisterActivity"
             android:exported="true">

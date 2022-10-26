@@ -5,29 +5,41 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/new_message_row_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
     <TextView
-        android:id="@+id/username_textview_new_message"
+        android:id="@+id/new_message_row_username_textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:text="TextView"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/imageview_new_message"
-        app:layout_constraintTop_toTopOf="@+id/imageview_new_message" />
+        app:layout_constraintStart_toEndOf="@+id/new_message_row_image"
+        app:layout_constraintTop_toTopOf="@+id/new_message_row_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"/>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageview_new_message"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <TextView
+        android:id="@+id/new_message_row_text_textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:civ_border_color="@color/white"
-        app:civ_border_width="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:text="latest message"
+        app:layout_constraintBottom_toBottomOf="@+id/new_message_row_image"
+        app:layout_constraintStart_toEndOf="@+id/new_message_row_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

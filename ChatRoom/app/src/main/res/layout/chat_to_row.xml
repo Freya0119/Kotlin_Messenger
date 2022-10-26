@@ -3,21 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/textView_to_row"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:text="answer something"
-        app:layout_constraintEnd_toStartOf="@+id/image_view_chat_to"
-        tools:layout_editor_absoluteY="18dp" />
+    android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_view_chat_to"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/chat_to_row_text_textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/chat_to_row_text_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="264dp"
-        tools:layout_editor_absoluteY="18dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:layout_marginEnd="16dp"
+        android:text="answer something"
+        app:layout_constraintBottom_toBottomOf="@+id/image_view_chat_to"
+        app:layout_constraintEnd_toStartOf="@+id/image_view_chat_to" />
+
+    <TextView
+        android:id="@+id/chat_to_row_username_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="username"
+        app:layout_constraintEnd_toStartOf="@+id/image_view_chat_to"
+        app:layout_constraintTop_toTopOf="@+id/image_view_chat_to" />
 </androidx.constraintlayout.widget.ConstraintLayout>
