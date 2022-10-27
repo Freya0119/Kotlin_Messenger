@@ -15,30 +15,25 @@ class LatestMessageRow(private val chatMessage: ChatMessage) : Item<GroupieViewH
     var chatPartnerUser: User? = null
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.textView_latest_message.text = chatMessage.text
-        //顯示聊天對象ID and image
-        val chatPartnerID: String
-        if (chatMessage.formID == FirebaseAuth.getInstance().uid) {
-            chatPartnerID = chatMessage.toID
+        viewHolder.itemView.latest_message_row_message_textView.text = chatMessage.text
+        
+        val chatPartnerID: String = if (chatMessage.formID == FirebaseAuth.getInstance().uid) {
+            chatMessage.toID
         } else {
-            chatPartnerID = chatMessage.formID
+            chatMessage.formID
         }
 
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$chatPartnerID")
+        val ref = FirebaseDatabase.getInstance().getReference("users/$chatPartnerID")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
             override fun onDataChange(p0: DataSnapshot) {
-                //set username once
                 val chatPartnerUser = p0.getValue(User::class.java)
-                viewHolder.itemView.textView_username_latest_message.text =
+                viewHolder.itemView.latest_message_row_username_textView.text =
                     chatPartnerUser?.username
-                //set image once
-                val targetImageView = viewHolder.itemView.imageView_latest_message
+                val targetImageView = viewHolder.itemView.latest_message_row_imageView
                 Picasso.get().load("${chatPartnerUser?.profileImageUrl}").into(targetImageView)
             }
+
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 

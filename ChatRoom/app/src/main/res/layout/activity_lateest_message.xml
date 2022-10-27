@@ -4,30 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LatestMessageActivity">
+    tools:context=".NewMessageActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_latest_message"
+        android:id="@+id/latest_message_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <ImageView
-        android:id="@+id/imageView_latest_message_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerView_latest_message"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerView_latest_message"
-        app:layout_constraintStart_toStartOf="@+id/recyclerView_latest_message"
-        app:layout_constraintTop_toTopOf="@+id/recyclerView_latest_message"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/textView_latest_message_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/imageView_latest_message_test"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerView_latest_message"
-        app:layout_constraintStart_toStartOf="@+id/recyclerView_latest_message"
-        app:layout_constraintTop_toTopOf="@+id/recyclerView_latest_message" />
 </androidx.constraintlayout.widget.ConstraintLayout>

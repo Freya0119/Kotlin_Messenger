@@ -28,10 +28,10 @@ class ChatLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
         //getParcelableExtra 接收putExtra傳過來的userItem???傳過來的是被選擇交談的user
-//        toUser = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
+        toUser = intent.getParcelableExtra<User>(MainActionActivity.USER_KEY)
 
-        val testChatItem=intent.getParcelableExtra<ChatMessage>(NewMessageActivity.TEST_KEY)
-        Toast.makeText(this,testChatItem?.text,Toast.LENGTH_SHORT).show()
+//        val testChatItem=intent.getParcelableExtra<ChatMessage>(NewMessageActivity.CHAT_USER_KEY)
+//        Toast.makeText(this,testChatItem?.text,Toast.LENGTH_SHORT).show()
 
         //設置菜單欄
         supportActionBar?.title = toUser?.username
@@ -50,7 +50,7 @@ class ChatLogActivity : AppCompatActivity() {
     private fun listenForMessage() {
         val fromID = FirebaseAuth.getInstance().uid
         val toID = toUser?.uid
-        val currentUser = NewMessageActivity.currentUser
+        val currentUser = MainActionActivity.currentUser
         val ref = FirebaseDatabase.getInstance().getReference("message/$fromID/$toID")
         ref.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
@@ -84,9 +84,9 @@ class ChatLogActivity : AppCompatActivity() {
         val text = edit_text_chat_log.text.toString()
         //push chat message
         val reference =
-            FirebaseDatabase.getInstance().getReference("/message/$fromID/$toID").push()
+            FirebaseDatabase.getInstance().getReference("message/$fromID/$toID").push()
         val toReference =
-            FirebaseDatabase.getInstance().getReference("/message/$toID/$fromID").push()
+            FirebaseDatabase.getInstance().getReference("message/$toID/$fromID").push()
         //chatMessage object 包括key text fromUid toUid 時間
         val chatMessage = ChatMessage(
             reference.key!!, text, fromID, toID, System.currentTimeMillis() / 1000

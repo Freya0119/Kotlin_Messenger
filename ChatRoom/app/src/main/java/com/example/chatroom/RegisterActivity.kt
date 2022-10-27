@@ -2,30 +2,17 @@ package com.example.chatroom
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.Log
-import android.widget.EditText
 import android.widget.Toast
-import androidx.core.graphics.drawable.toDrawable
-import com.example.chatroom.NewMessageActivity.Companion.USER_KEY
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.auth.User
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_register.*
-import kotlinx.android.synthetic.main.activity_register.view.*
-import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,11 +47,6 @@ class RegisterActivity : AppCompatActivity() {
 //                edit_text_password.text.toString()
 //            ).addOnSuccessListener {
 //                Log.d("LOGIN", "Login Successful, try to into latest message.")
-//                Toast.makeText(
-//                    this,
-//                    "Login Successful, try to into latest message.",
-//                    Toast.LENGTH_SHORT
-//                ).show()
 //                //login latest activity
 ////            val intent = Intent(this, LatestMessageActivity::class.java)
 //                //TEST login new log activity
@@ -175,7 +157,7 @@ class RegisterActivity : AppCompatActivity() {
             Toast.makeText(this, "Save into FirebaseDatabase successful.", Toast.LENGTH_LONG).show()
             //TODO next test
             //註冊完成並打開latest message
-            val intent = Intent(this, LatestMessageActivity::class.java)
+            val intent = Intent(this, NewMessageActivity::class.java)
             //清除所有TASK並且把latestMessage_activity設為新的TASK?
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
