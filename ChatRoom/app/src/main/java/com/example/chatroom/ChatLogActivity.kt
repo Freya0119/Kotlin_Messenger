@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.new_message_row.*
 
 class ChatLogActivity : AppCompatActivity() {
     companion object {
-        const val TAG = "CHAT LOG"
+        const val USER_KEY = "USER_KEY"
     }
 
     //adapter
@@ -28,10 +28,11 @@ class ChatLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
         //getParcelableExtra 接收putExtra傳過來的userItem???傳過來的是被選擇交談的user
-        toUser = intent.getParcelableExtra<User>(MainActionActivity.USER_KEY)
+        toUser = intent.getParcelableExtra<User>(USER_KEY)
 
 //        val testChatItem=intent.getParcelableExtra<ChatMessage>(NewMessageActivity.CHAT_USER_KEY)
 //        Toast.makeText(this,testChatItem?.text,Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, toUser?.username, Toast.LENGTH_SHORT).show()
 
         //設置菜單欄
         supportActionBar?.title = toUser?.username
@@ -39,7 +40,6 @@ class ChatLogActivity : AppCompatActivity() {
         recycle_chat_log.adapter = adapter
 
         button_send_chat_log.setOnClickListener() {
-            Log.d(TAG, "this is send button")
             performSendMessage()
         }
 
@@ -56,14 +56,12 @@ class ChatLogActivity : AppCompatActivity() {
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                 val chatMessage = p0.getValue(ChatMessage::class.java)
                 if (chatMessage != null) {
-//                    Log.d(TAG, chatMessage.text)
                     //判斷id為me or you
                     if (chatMessage.formID == FirebaseAuth.getInstance().uid) {
 //                        val currentUser = LatestMessageActivity.currentUser
-                        adapter.add(ChatFromItem("${chatMessage.text}", currentUser!!))
-                        recycle_chat_log.adapter = adapter
+                        adapter.add(ChatToItem("${chatMessage.text}", currentUser!!))
                     } else {
-                        adapter.add(ChatToItem("${chatMessage.text}", toUser!!))
+                        adapter.add(ChatFromItem("${chatMessage.text}", toUser!!))
                     }
                 }
                 //拉消息到最下面

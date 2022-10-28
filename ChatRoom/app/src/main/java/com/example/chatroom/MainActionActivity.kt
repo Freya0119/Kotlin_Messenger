@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.new_message_row.view.*
 class MainActionActivity : AppCompatActivity() {
     companion object {
         const val USER_KEY = "USER_KEY"
+
         //哪裡抓當前user合適
         var currentUser: User? = null
     }
@@ -40,9 +41,21 @@ class MainActionActivity : AppCompatActivity() {
 //        fetchUserAndText()
     }
 
+    private fun fetchCurrentUser() {
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("user/$uid")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                currentUser = snapshot.getValue(User::class.java)
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
     //抓所有user
     private fun fetchUsers() {
-        val ref = FirebaseDatabase.getInstance().getReference("/user")
+        val ref = FirebaseDatabase.getInstance().getReference("user")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val adapter = GroupAdapter<GroupieViewHolder>()
@@ -51,9 +64,11 @@ class MainActionActivity : AppCompatActivity() {
                     //別的*.kt的User Class
                     val user = it.getValue(User::class.java)
                     if (user != null) {
-                        //add Item<GroupViewHolder> object
-                        adapter.add(UserItem(user))
-                        recycle_new_message.adapter = adapter
+                        if (user.uid != FirebaseAuth.getInstance().uid) {
+                            //add Item<GroupViewHolder> object
+                            adapter.add(UserItem(user))
+                            recycle_new_message.adapter = adapter
+                        }
                     }
                 }
                 //點擊進入對應聊天activity
@@ -67,17 +82,6 @@ class MainActionActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onCancelled(error: DatabaseError) {}
-        })
-    }
-
-    private fun fetchCurrentUser() {
-        val uid = FirebaseAuth.getInstance().uid
-        val ref = FirebaseDatabase.getInstance().getReference("user/$uid")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                currentUser = snapshot.getValue(User::class.java)
-            }
             override fun onCancelled(error: DatabaseError) {}
         })
     }

@@ -16,17 +16,17 @@ class LatestMessageRow(private val chatMessage: ChatMessage) : Item<GroupieViewH
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.latest_message_row_message_textView.text = chatMessage.text
-        
+
         val chatPartnerID: String = if (chatMessage.formID == FirebaseAuth.getInstance().uid) {
             chatMessage.toID
         } else {
             chatMessage.formID
         }
 
-        val ref = FirebaseDatabase.getInstance().getReference("users/$chatPartnerID")
+        val ref = FirebaseDatabase.getInstance().getReference("user/$chatPartnerID")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
-                val chatPartnerUser = p0.getValue(User::class.java)
+                chatPartnerUser = p0.getValue(User::class.java)
                 viewHolder.itemView.latest_message_row_username_textView.text =
                     chatPartnerUser?.username
                 val targetImageView = viewHolder.itemView.latest_message_row_imageView

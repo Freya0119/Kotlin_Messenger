@@ -23,16 +23,18 @@ import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_lateest_message.*
 import kotlinx.android.synthetic.main.activity_main_action.*
+import kotlinx.android.synthetic.main.latest_message_row.*
 import kotlinx.android.synthetic.main.latest_message_row.view.*
 import kotlinx.android.synthetic.main.select_dialog_item_material.*
 import kotlinx.android.synthetic.main.select_item_material.*
+import java.sql.Types.NULL
 import com.xwray.groupie.GroupieAdapter as XwrayGroupieGroupieAdapter
 
 class NewMessageActivity : AppCompatActivity() {
 
     companion object {
-        var currentUser: User? = null
-        val TAG = "LatestMessage"
+        //        var currentUser: User? = null
+        const val USER_KEY = "USER_KEY"
     }
 
     private val adapter = GroupAdapter<GroupieViewHolder>()
@@ -43,53 +45,48 @@ class NewMessageActivity : AppCompatActivity() {
 
         latest_message_recyclerView.adapter = adapter
         //添加用戶之間的分隔線
-//        latest_message_recyclerView.addItemDecoration(
-//            DividerItemDecoration(
-//                this,
-//                DividerItemDecoration.VERTICAL
-//            )
-//        )
+        latest_message_recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                DividerItemDecoration.VERTICAL
+            )
+        )
         //click then open 對話紀錄
         adapter.setOnItemClickListener { item, view ->
             val intent = Intent(this, ChatLogActivity::class.java)
             val row = item as LatestMessageRow
             //通過 USER_KEY 連結 row.chatPartnerUser
-            intent.putExtra(MainActionActivity.USER_KEY, row.chatPartnerUser)
+            intent.putExtra(USER_KEY, row.chatPartnerUser)
             startActivity(intent)
         }
 //        fetchCurrentUser()
-        //some thing wrong text cannot be change
         listenLatestMessage()
         //TODO 功能???
 //        verifyUserIsLoggedIn()
     }
 
     //TODO hash table
-    val latestMessageMap = HashMap<String, ChatMessage>()
+    private val latestMessageMap = HashMap<String, ChatMessage>()
 
     private fun listenLatestMessage() {
         val fromID = FirebaseAuth.getInstance().uid
         val latestMessageRef =
             FirebaseDatabase.getInstance().getReference("latest-messages/$fromID")
-//        latestMessageRef.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onCancelled(error: DatabaseError) {}
-//
-//            override fun onDataChange(p0: DataSnapshot) {
-//                val chatToUser = p0.getValue(User::class.java)
-//                textView_latest_message_test.text = chatToUser?.username
-//                Picasso.get().load(chatToUser?.profileImageUrl).into(imageView_latest_message_test)
-//            }
-//        })
-
         latestMessageRef.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(p0: DataSnapshot, previousChildName: String?) {
                 val chatMessage = p0.getValue(ChatMessage::class.java) ?: return
+//                if (chatMessage.formID == fromID) {
+//                    latestMessageMap[p0.key!!] = chatMessage
+//                }
                 latestMessageMap[p0.key!!] = chatMessage
                 refreshRecyclerViewMessage()
             }
 
             override fun onChildChanged(p0: DataSnapshot, previousChildName: String?) {
                 val chatMessage = p0.getValue(ChatMessage::class.java) ?: return
+//                if (chatMessage.formID == fromID) {
+//                    latestMessageMap[p0.key!!] = chatMessage
+//                }
                 latestMessageMap[p0.key!!] = chatMessage
                 refreshRecyclerViewMessage()
             }
