@@ -3,6 +3,7 @@ package com.example.chatroom
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -102,6 +103,13 @@ class ChatLogActivity : AppCompatActivity() {
         val toLatestMessageRef =
             FirebaseDatabase.getInstance().getReference("latest-messages/$toID/$fromID")
         toLatestMessageRef.setValue(chatMessage)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
 

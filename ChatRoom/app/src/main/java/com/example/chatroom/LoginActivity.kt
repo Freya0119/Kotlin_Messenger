@@ -13,12 +13,14 @@ import kotlinx.android.synthetic.main.activity_login.view.*
 class LoginActivity : AppCompatActivity() {
     companion object {
         const val USER_KEY = "USER_KEY"
-        val currentUser:User?=null
+        val currentUser: User? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        checkLogin()
 
         login_button.setOnClickListener() {
             //1.Check email and password is not empty
@@ -36,6 +38,19 @@ class LoginActivity : AppCompatActivity() {
                 val intent = Intent(this, MainActionActivity::class.java)
                 startActivity(intent)
             }
+        }
+        back_register_button.setOnClickListener() {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun checkLogin() {
+        val uid = FirebaseAuth.getInstance().uid
+        if (uid != null) {
+            startActivity(Intent(this, MainActionActivity::class.java))
+        } else {
+            Toast.makeText(this, "UID is empty.", Toast.LENGTH_SHORT).show()
         }
     }
 }

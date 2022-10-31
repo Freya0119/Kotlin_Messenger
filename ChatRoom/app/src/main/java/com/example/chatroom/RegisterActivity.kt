@@ -60,7 +60,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    val currentUser: User? = null
+//    val currentUser: User? = null
 
     //註冊
     private fun performRegister() {
@@ -69,7 +69,6 @@ class RegisterActivity : AppCompatActivity() {
         val strEmail = edit_text_email.text.toString()
         val strPassword = edit_text_password.text.toString()
 
-        //如果其中一個為空
         if ((strUsername.isEmpty()) || (strEmail.isEmpty()) || (strPassword.isEmpty())) {
             Toast.makeText(this, "It is empty. Enter something.", Toast.LENGTH_SHORT).show()
             return
@@ -82,16 +81,8 @@ class RegisterActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 //如果不成功?
                 if (!it.isSuccessful) return@addOnCompleteListener
-
-                Log.d(
-                    "REGISTER",
-                    "Register successful, uid: ${it.result.user?.uid}. Try to upload image to Firebase."
-                )
                 //儲存到firebase 暫時禁用
                 uploadImageToFirebaseStorage()
-            }
-            .addOnFailureListener {
-                Log.d("REGISTER", "Register failed, message: ${it.message}.")
             }
     }
 
@@ -125,12 +116,10 @@ class RegisterActivity : AppCompatActivity() {
 
         val uid = FirebaseAuth.getInstance().uid
         //這裡是儲存到storage 所以位置和user message不一樣
-        //image名稱是uid
         val ref = FirebaseStorage.getInstance().getReference("image/${uid}")
         //upload image and create user to FirebaseDatabase
         ref.putFile(selectedPhotoUri!!).addOnSuccessListener {
             Log.d("IMAGE", "Upload image to: ${it.metadata?.path}.")
-
             //downloadUrl需要配合putFile 作用是下載url???
             //儲存以後打開上傳到firebase 為了把image path傳給saveUserToFirebaseDatabase 再存入/user/
             ref.downloadUrl.addOnSuccessListener {
@@ -149,7 +138,7 @@ class RegisterActivity : AppCompatActivity() {
     private fun saveUserToFirebaseDatabase(profileImageUrl: String) {
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val ref = FirebaseDatabase.getInstance()
-            .getReference("/user/${uid}")
+            .getReference("user/${uid}")
 
         val user = User(uid, edit_text_username.text.toString(), profileImageUrl)
 

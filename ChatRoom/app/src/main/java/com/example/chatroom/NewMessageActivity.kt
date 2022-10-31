@@ -33,7 +33,7 @@ import com.xwray.groupie.GroupieAdapter as XwrayGroupieGroupieAdapter
 class NewMessageActivity : AppCompatActivity() {
 
     companion object {
-        //        var currentUser: User? = null
+//        var currentUser: User? = null
         const val USER_KEY = "USER_KEY"
     }
 
@@ -61,7 +61,7 @@ class NewMessageActivity : AppCompatActivity() {
         }
 //        fetchCurrentUser()
         listenLatestMessage()
-        //TODO 功能???
+        //TODO 檢查是否有帳號登陸
 //        verifyUserIsLoggedIn()
     }
 
@@ -75,18 +75,12 @@ class NewMessageActivity : AppCompatActivity() {
         latestMessageRef.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(p0: DataSnapshot, previousChildName: String?) {
                 val chatMessage = p0.getValue(ChatMessage::class.java) ?: return
-//                if (chatMessage.formID == fromID) {
-//                    latestMessageMap[p0.key!!] = chatMessage
-//                }
                 latestMessageMap[p0.key!!] = chatMessage
                 refreshRecyclerViewMessage()
             }
 
             override fun onChildChanged(p0: DataSnapshot, previousChildName: String?) {
                 val chatMessage = p0.getValue(ChatMessage::class.java) ?: return
-//                if (chatMessage.formID == fromID) {
-//                    latestMessageMap[p0.key!!] = chatMessage
-//                }
                 latestMessageMap[p0.key!!] = chatMessage
                 refreshRecyclerViewMessage()
             }
@@ -115,32 +109,6 @@ class NewMessageActivity : AppCompatActivity() {
 //            }
 //
 //            override fun onCancelled(error: DatabaseError) {}
-//        })
-//    }
-
-//    private fun fetchUserAndText() {
-//        val fromID = FirebaseAuth.getInstance().uid
-//        val chatMessageRef = FirebaseDatabase.getInstance().getReference("latest-messages/$fromID")
-//        chatMessageRef.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onCancelled(error: DatabaseError) {}
-//
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                val adapter = GroupAdapter<GroupieViewHolder>()
-//                snapshot.children.forEach {
-//                    val chatItem = it.getValue(ChatMessage::class.java)
-//                    adapter.add(LastMessageRow(chatItem!!))
-//                }
-//                recycle_new_message.adapter = adapter
-//
-//                adapter.setOnItemClickListener { item, view ->
-//                    val userItem = item as LastMessageRow
-//                    val intent = Intent(view.context, ChatLogActivity::class.java)
-//                    intent.putExtra(MainActionActivity.USER_KEY, userItem.chatUser)
-//                    startActivity(intent)
-//                    //???
-//                    finish()
-//                }
-//            }
 //        })
 //    }
 
@@ -174,6 +142,7 @@ class NewMessageActivity : AppCompatActivity() {
                 val intent = Intent(this, RegisterActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
+                finish()
             }
         }
         return super.onOptionsItemSelected(item)

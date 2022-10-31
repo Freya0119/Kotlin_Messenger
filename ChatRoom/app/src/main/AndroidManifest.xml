@@ -22,7 +22,7 @@
         </activity>
         <activity
             android:name=".NewMessageActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".RegisterActivity"
             android:exported="true">
@@ -44,7 +44,7 @@
             android:exported="false">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".RegisterActivity" />
+                android:value=".LoginActivity" />
         </activity>
     </application>
 
