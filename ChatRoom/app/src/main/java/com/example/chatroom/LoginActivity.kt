@@ -42,6 +42,7 @@ class LoginActivity : AppCompatActivity() {
         back_register_button.setOnClickListener() {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 
@@ -50,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
         if (uid != null) {
             startActivity(Intent(this, MainActionActivity::class.java))
         } else {
-            Toast.makeText(this, "UID is empty.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Check login. UID is empty.", Toast.LENGTH_SHORT).show()
         }
     }
 }

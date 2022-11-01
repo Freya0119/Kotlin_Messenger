@@ -32,13 +32,12 @@ class MainActionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_action)
         // get USER_KEY 前面要加入USER_KEY為暗號，這裡要設定USER_KEY為cons，暗號對上才能設置
-        //沒用到
+//        //沒用到
 //        val user = intent.getParcelableExtra<User>(MainActionActivity.USER_KEY)
 //        supportActionBar?.title = user?.username
 
         fetchCurrentUser()
         fetchUsers()
-//        fetchUserAndText()
     }
 
     private fun fetchCurrentUser() {
@@ -86,32 +85,6 @@ class MainActionActivity : AppCompatActivity() {
         })
     }
 
-//    private fun fetchUserAndText() {
-//        val fromID = FirebaseAuth.getInstance().uid
-//        val chatMessageRef = FirebaseDatabase.getInstance().getReference("latest-messages/$fromID")
-//        chatMessageRef.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onCancelled(error: DatabaseError) {}
-//
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                val adapter = GroupAdapter<GroupieViewHolder>()
-//                snapshot.children.forEach {
-//                    val chatItem = it.getValue(ChatMessage::class.java)
-//                    adapter.add(LastMessageRow(chatItem!!))
-//                }
-//                recycle_new_message.adapter = adapter
-//
-//                adapter.setOnItemClickListener { item, view ->
-//                    val userItem = item as LastMessageRow
-//                    val intent = Intent(view.context, ChatLogActivity::class.java)
-//                    intent.putExtra(USER_KEY, userItem.chatUser)
-//                    startActivity(intent)
-//                    //???
-//                    finish()
-//                }
-//            }
-//        })
-//}
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.nav_menu, menu)
         return super.onCreateOptionsMenu(menu)
@@ -156,31 +129,3 @@ class UserItem(val user: User) : Item<GroupieViewHolder>() {
         return R.layout.new_message_row
     }
 }
-
-//class LastMessageRow(val chatMessage: ChatMessage) : Item<GroupieViewHolder>() {
-//    var chatUser: User? = null
-//    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-//        val uid = FirebaseAuth.getInstance().uid
-//        val chatToUid: String = if (chatMessage.formID == uid) {
-//            chatMessage.toID
-//        } else {
-//            chatMessage.formID
-//        }
-//        val userRef = FirebaseDatabase.getInstance().getReference("user/$chatToUid")
-//        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                chatUser = snapshot.getValue(User::class.java)
-//                viewHolder.itemView.new_message_row_username_textView.text = chatUser?.username
-//                viewHolder.itemView.new_message_row_text_textView.text = chatMessage.text
-//                Picasso.get().load(chatUser?.profileImageUrl)
-//                    .into(viewHolder.itemView.new_message_row_image)
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {}
-//        })
-//    }
-//
-//    override fun getLayout(): Int {
-//        return R.layout.new_message_row
-//    }
-//}
